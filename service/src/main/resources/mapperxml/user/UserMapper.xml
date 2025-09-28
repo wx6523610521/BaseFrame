@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.service.user.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="work.chncyl.service.user.entity.User">
+    <!--@mbg.generated-->
+    <!--@Table sys_user-->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="UserName" jdbcType="VARCHAR" property="userName" />
+    <result column="Sex" jdbcType="VARCHAR" property="sex" />
+    <result column="PhoneNum" jdbcType="CHAR" property="phoneNum" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+    <result column="CompanyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UpdateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UpdateUser" jdbcType="INTEGER" property="updateUser" />
+    <result column="IsDeleted" jdbcType="BOOLEAN" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Id, UserName, Sex, PhoneNum, Email, CompanyName, CreateTime, UpdateTime, UpdateUser, 
+    IsDeleted
+  </sql>
+</mapper>

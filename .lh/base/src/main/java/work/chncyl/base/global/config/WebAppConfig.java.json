@@ -1,0 +1,18 @@
+{
+    "sourceFile": "base/src/main/java/work/chncyl/base/global/config/WebAppConfig.java",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1758184827525,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1758184827525,
+            "name": "Commit-0",
+            "content": "package work.chncyl.base.global.config;\r\n\r\nimport work.chncyl.base.global.aspect.CurrentUserMethodArgumentResolver;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.util.AntPathMatcher;\r\nimport org.springframework.web.method.support.HandlerMethodArgumentResolver;\r\nimport org.springframework.web.servlet.config.annotation.PathMatchConfigurer;\r\nimport org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;\r\nimport org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;\r\n\r\nimport java.util.List;\r\n\r\n@Configuration\r\npublic class WebAppConfig extends WebMvcConfigurationSupport {\r\n\r\n    /**\r\n     * 新增参数处理器，实现登录用户注入\r\n     */\r\n    @Override\r\n    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {\r\n        argumentResolvers.add(new CurrentUserMethodArgumentResolver());\r\n    }\r\n\r\n    /**\r\n     * 实现接口请求url大小写忽略\r\n     */\r\n    @Override\r\n    public void configurePathMatch(PathMatchConfigurer configurer) {\r\n        AntPathMatcher matcher = new AntPathMatcher();\r\n        matcher.setCaseSensitive(false);\r\n        configurer.setPathMatcher(matcher);\r\n    }\r\n\r\n    /**\r\n     * 解决因有类继承WebMvcConfigurationSupport等原因，导致Spring Boot的WebMvc自动配置失效，进而导致视图解析器无法解析返回视图\r\n     */\r\n    @Override\r\n    public void addResourceHandlers(ResourceHandlerRegistry registry) {\r\n        registry.addResourceHandler(\"/**\").addResourceLocations(\"classpath:/META-INF/resources/\");\r\n        super.addResourceHandlers(registry);\r\n    }\r\n}"
+        }
+    ]
+}

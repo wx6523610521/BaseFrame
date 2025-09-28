@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.system.dictionary.mapper.DictionaryMapper">
+  <resultMap id="BaseResultMap" type="work.chncyl.system.dictionary.entity.Dictionary">
+    <!--@mbg.generated-->
+    <!--@Table sys_dictionary-->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Type" jdbcType="VARCHAR" property="type" />
+    <result column="TypeName" jdbcType="VARCHAR" property="typeName" />
+    <result column="Code" jdbcType="VARCHAR" property="code" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="UpId" jdbcType="INTEGER" property="upId" />
+    <result column="Level" jdbcType="TINYINT" property="level" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    Id, `Type`, TypeName, Code, `Name`, UpId, `Level`
+  </sql>
+
+  <select id="getInfos" resultMap="BaseResultMap">
+      SELECT
+      <include refid="Base_Column_List" />
+      FROM sys_dictionary
+      <where>
+          <if test="info.id != null and info.id != ''">
+              and Id = #{info.id}
+          </if>
+          <if test="info.type != null and info.type != ''">
+              and Type = #{info.type}
+          </if>
+          <if test="info.code != null and info.code != ''">
+              and Code = #{info.code}
+          </if>
+          <if test="info.upId != null and info.upId != ''">
+              and upId = #{info.upId}
+          </if>
+          <if test="info.name != null and info.name != ''">
+              and Name like concat('%', #{info.name}, '%')
+          </if>
+      </where>
+      ORDER BY Type, Level
+  </select>
+
+  <select id="getDictionaryType" resultType="work.chncyl.system.dictionary.dto.output.DictionaryTypeInfo">
+      SELECT Type,
+             TypeName
+      FROM sys_dictionary
+      <where>
+          <if test="info.type != null and info.type != ''">
+              and Type = #{info.type}
+          </if>
+          <if test="info.code != null and info.code != ''">
+              and Code = #{info.code}
+          </if>
+          <if test="info.id != null and info.id != ''">
+              and Id = #{info.id}
+          </if>
+      </where>
+      GROUP BY Type, TypeName
+  </select>
+</mapper>

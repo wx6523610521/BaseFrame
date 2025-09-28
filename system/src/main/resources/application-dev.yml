@@ -1,0 +1,139 @@
+server:
+  port: 8665
+  servlet:
+    context-path: /api
+spring:
+  arthas:
+    # 开启arthas
+    enabled: true
+  #  spring主配置
+  main:
+    # 不允许循环引用(默认)，循环引用会大大增加启动复杂性
+    allow-circular-references: false
+  #数据库
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-test-query: SELECT 1 # 数据库连接测试
+      connection-timeout: 10000 # 连接超时时间(毫秒)
+      idle-timeout: 30000 # 空闲连接存活最大时间(毫秒)。 idle-timeout 要小于 max-lifetime
+      # 池中连接最长生命周期。默认为 1800000，如果不等于 0 且小于 30 秒则会被重置为 30 分钟。
+      # 最长生命周期一定要小于mysql的wait_timeout，hikari不会检测链接是否还可用，可能导致mysql已主动断开链接，hikari仍旧使用该链接
+      max-lifetime: 600000
+    dynamic:
+      #主库名称
+      primary: mysql
+      datasource:
+        #配置的库名，可使用任意名，不一定是mysql
+        mysql:
+          url: jdbc:mysql://localhost:3306/db?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: 123456
+          driver-class-name: com.mysql.cj.jdbc.Driver
+  #          从库配置
+  #        mysql-slave:
+  #          url: jdbc:mysql://localhost:3306/slavedb?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+  #          username: root
+  #          password: 123456
+  #          driver-class-name: com.mysql.cj.jdbc.Driver
+  #redis配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    password:
+    lettuce:
+      pool:
+        enabled: true
+  # 序列化
+  jackson:
+    time-zone: Asia/Shanghai
+    #模板文件配置
+  freemarker:
+    suffix: .ftl
+    charset: UTF-8
+#mybatis plus 设置
+mybatis-plus:
+  #  xml文件位置配置
+  mapper-locations:
+    - classpath*:work/chncyl/**/mapper/xml/*Mapper.xml
+    - classpath*:/mapperxml/**/*.xml
+  #配置枚举 支持通配符 * 或者 ; 分割
+  type-enums-package: work.chncyl.*.enmu
+  global-config:
+    # 关闭MP自带的banner
+    banner: false
+    db-config:
+      # 默认数据库表下划线命名
+      table-underline: true
+      update-strategy: not_null
+      logic-delete-field: isDeleted  # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      # mysql 字段为`` 列名格式化配置
+      column-format: "`%s`"
+      #达梦配置""
+      # column-format: '"%s"'
+  configuration:
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    # 返回类型为Map,显示null对应的字段
+    call-setters-on-nulls: true
+    map-underscore-to-camel-case: false # 数据库下划线自动转驼峰标示关闭
+# 接口文档
+knife4j:
+  # 启用文档
+  enable: true
+  #默认是false ,屏蔽所有Swagger的相关资源
+  production: false
+  setting:
+    home-custom-path: /doc.html
+# 诊断工具
+arthas:
+  http-port: 18666
+  telnet-port: 18667
+# 日志
+logging:
+  level:
+    work.chncyl: info
+
+# 自定义安全配置
+security:
+  expire-second: 43200
+  secret-key: gQGR0Xw0X1Ly?Ghs*tVb
+  # 允许多处使用同一token
+  can-redeployed: true
+  # 密码错误次数上限
+  password-error-count: 5
+  # 账户每次锁定时间（分钟）
+  account-lock-minutes: 5
+# 自定义全局id生成器配置
+# ID生成器配置
+id:
+  generator:
+    # 起始时间（格式：YYYY-MM-DDTHH:mm:ss）
+    start-time: 2025-01-01T00:00:00
+    # 机器ID (0-255)，分布式部署时每台机器需要配置不同的ID，不配置则获取 当前进程ID%256作为机器ID
+    worker-id: 0
+    # 默认分组ID (0-15)，用于分库分表
+    default-group: 0
+    # 性能优化配置
+    performance:
+      # 是否启用时钟回拨保护
+      clock-backwards-protection: true
+      # 时钟回拨最大容忍毫秒数
+      max-clock-backwards-ms: 1000
+      # 序列号预分配大小
+      sequence-prealloc-size: 200
+
+# 弱密码检验
+weak-password-check:
+  enable: false
+# 含创建信息的随机字符串开始计算年份,写定后不要修改，否则将导致数据不一致
+random-year-start: 2025
+
+
+

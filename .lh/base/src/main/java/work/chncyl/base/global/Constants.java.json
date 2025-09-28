@@ -1,0 +1,18 @@
+{
+    "sourceFile": "base/src/main/java/work/chncyl/base/global/Constants.java",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1758184824032,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1758184824032,
+            "name": "Commit-0",
+            "content": "package work.chncyl.base.global;\r\n\r\npublic interface Constants {\r\n    String ACCESS_TOKEN = \"Authorization\";\r\n\r\n    String REFRESH_TOKEN_KEY = \"token:refresh:\";\r\n\r\n    String CAPTCHA_CODES=\"Captcha:\";\r\n\r\n    String PASSWORD_ERROR_NUM=\"pwd:error:\";\r\n\r\n    String DICTIONARY_KEY=\"all:dictionary\";\r\n}\r\n"
+        }
+    ]
+}

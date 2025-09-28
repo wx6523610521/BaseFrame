@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.base.global.service.mapper.GlobalMapper">
+    <select id="searchDictionarys" resultType="work.chncyl.base.global.service.dto.Dictionary">
+        SELECT *
+        FROM sys_dictionary
+        <where>
+            <if test="info.id != null and info.id != ''">
+                and Id = #{info.id}
+            </if>
+            <if test="info.type != null and info.type != ''">
+                and Type = #{info.type}
+            </if>
+            <if test="info.code != null and info.code != ''">
+                and Code = #{info.code}
+            </if>
+            <if test="info.upId != null and info.upId != ''">
+                and upId = #{info.upId}
+            </if>
+            <if test="info.name != null and info.name != ''">
+                and Name like concat('%', #{info.name}, '%')
+            </if>
+        </where>
+        ORDER BY Type, Level
+    </select>
+
+    <select id="getDefaultRole" resultType="work.chncyl.base.global.security.dto.RoleInfo">
+        SELECT *
+        FROM sys_role
+        WHERE IsDeleted = false
+          AND IsDefault = true
+    </select>
+
+    <select id="getRolePermissions" resultType="java.util.Map">
+        SELECT srp.RoleId        AS roleId,
+               sp.PermissionName AS permissionName
+        FROM sys_permissions sp
+        INNER JOIN sys_role_permission srp ON srp.PermissionId = sp.Id
+                 LEFT JOIN sys_role sr ON srp.RoleId = sr.Id AND sr.IsDeleted = false
+        WHERE sp.IsDeleted = false
+        <if test="dto.roleIds != null and dto.roleIds.size() != 0">
+            AND srp.RoleId in
+            <foreach collection="dto.roleIds" item="roleId" open="(" separator="," close=")">
+                #{roleId}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getRoles" resultType="work.chncyl.base.global.security.dto.RoleInfo">
+        SELECT *
+        FROM sys_role
+        WHERE IsDeleted = false
+        <if test="dto.defaultRole != null">
+            AND IsDefault = #{dto.defaultRole}
+        </if>
+        <if test="dto.roleIds != null and dto.roleIds.size() > 0">
+            AND Id in
+            <foreach collection="dto.roleIds" item="roleId" open="(" separator="," close=")">
+                #{roleId}
+            </foreach>
+        </if>
+    </select>
+</mapper>

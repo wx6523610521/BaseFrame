@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.service.permission.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="work.chncyl.service.permission.entity.Role">
+        <!--@mbg.generated-->
+        <!--@Table sys_role-->
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="Name" jdbcType="VARCHAR" property="name"/>
+        <result column="Mark" jdbcType="VARCHAR" property="mark"/>
+        <result column="IsDefault" jdbcType="BOOLEAN" property="isDefault"/>
+        <result column="Status" jdbcType="TINYINT" property="status"/>
+        <result column="Sort" jdbcType="INTEGER" property="sort"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="Creator" jdbcType="INTEGER" property="creator"/>
+        <result column="UpdateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="UpdateUser" jdbcType="INTEGER" property="updateUser"/>
+        <result column="IsDeleted" jdbcType="BOOLEAN" property="isDeleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        Id,
+        `Name`,
+        Mark,
+        IsDefault,
+        `Status`,
+        Sort,
+        CreateTime,
+        Creator,
+        UpdateTime,
+        UpdateUser,
+        IsDeleted
+    </sql>
+
+    <delete id="disassociate">
+        DELETE
+        FROM sys_role_permission
+        WHERE RoleId = #{associate.roleId}
+        <if test="associate.relevanceId != null and associate.relevanceId.size() > 0">
+            AND PermissionId IN
+            <foreach collection="associate.relevanceId" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+
+    <select id="page" resultMap="BaseResultMap">
+        SELECT *
+        FROM sys_role
+        WHERE IsDeleted = false
+        <if test="input.name != null and input.name != ''">
+            and Name like concat('%', #{input.name}, '%')
+        </if>
+        <if test="input.status != null">
+            and Status = #{input.status}
+        </if>
+        <if test="input.mark != null and input.mark != ''">
+            and Mark = #{input.mark}
+        </if>
+        <if test="input.isDefault != null">
+            and IsDefault = #{input.isDefault}
+        </if>
+        ORDER BY Sort
+    </select>
+
+    <insert id="associate">
+        INSERT INTO sys_role_permission(RoleId, PermissionId)
+        VALUES
+        <foreach collection="associate.relevanceId" item="item" separator=",">
+            (#{associate.roleId}, #{item})
+        </foreach>
+    </insert>
+
+    <select id="getDefaultRole" resultMap="BaseResultMap">
+        SELECT *
+        FROM sys_role
+        WHERE IsDeleted = false
+          AND IsDefault = true
+    </select>
+
+    <insert id="associateRole">
+        INSERT INTO sys_user_role(UserId, RoleId)
+        VALUES
+            (#{associate.principalId}, #{item})
+        <foreach collection="associate.relevanceId" item="item" separator=",">
+        </foreach>
+    </insert>
+</mapper>

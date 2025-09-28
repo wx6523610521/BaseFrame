@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.service.user.mapper.AccountMapper">
+    <resultMap id="BaseResultMap" type="work.chncyl.service.user.entity.Account">
+        <!--@mbg.generated-->
+        <!--@Table sys_account-->
+        <id column="Id" jdbcType="INTEGER" property="id"/>
+        <result column="AccountName" jdbcType="VARCHAR" property="accountName"/>
+        <result column="AccountPwd" jdbcType="VARCHAR" property="accountPwd"/>
+        <result column="UserId" jdbcType="INTEGER" property="userId"/>
+        <result column="AccountType" jdbcType="TINYINT" property="accountType"/>
+        <result column="AccountStatus" jdbcType="TINYINT" property="accountStatus"/>
+        <result column="LastLoginTime" jdbcType="TIMESTAMP" property="lastLoginTime"/>
+        <result column="HeadImage" jdbcType="VARCHAR" property="headImage"/>
+        <result column="NickName" jdbcType="VARCHAR" property="nickName"/>
+        <result column="WechatOpenId" jdbcType="VARCHAR" property="wechatOpenId"/>
+        <result column="IsDeleted" jdbcType="BOOLEAN" property="isDeleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        Id,
+        AccountName,
+        AccountPwd,
+        UserId,
+        AccountType,
+        AccountStatus,
+        LastLoginTime,
+        HeadImage,
+        NickName,
+        WechatOpenId,
+        IsDeleted
+    </sql>
+
+    <select id="getLoginUserInfo" resultType="work.chncyl.base.global.security.dto.LoginedUserInfo">
+        SELECT a.UserId,
+               a.AccountType          userType,
+               a.AccountName          username,
+               a.AccountPwd,
+               a.AccountStatus,
+               GROUP_CONCAT(r.RoleId) roleIds,
+               a.HeadImage,
+               a.NickName,
+               u.PhoneNum,
+               a.LastLoginTime
+        FROM sys_account a
+                 LEFT JOIN sys_user u ON a.UserId = u.Id
+                 LEFT JOIN sys_user_role r ON u.Id = r.UserId
+        WHERE ACCOUNTNAME = #{userName,jdbcType=VARCHAR}
+        GROUP BY a.id
+    </select>
+
+    <update id="refreshUserType">
+        UPDATE sys_account
+        SET AccountType=#{userType}
+        WHERE UserId = #{userId}
+    </update>
+
+    <select id="getAccountByUserId" resultMap="BaseResultMap">
+        SELECT *
+        FROM sys_account
+        WHERE IsDeleted = false
+          AND AccountStatus = 1
+          AND UserId = #{userId}
+    </select>
+</mapper>

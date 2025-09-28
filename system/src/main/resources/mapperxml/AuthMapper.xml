@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.system.authentication.mapper.AuthMapper">
+    <select id="getLoginUserInfo" resultType="work.chncyl.base.global.security.dto.LoginedUserInfo">
+        SELECT a.UserId,
+               a.AccountType          userType,
+               a.AccountName          username,
+               a.AccountPwd,
+               a.AccountStatus,
+               GROUP_CONCAT(r.RoleId) roleIds,
+               a.HeadImage,
+               a.NickName,
+               u.PhoneNum,
+               a.LastLoginTime
+        FROM sys_account a
+                 LEFT JOIN sys_user u ON a.UserId = u.Id
+                 LEFT JOIN sys_user_role r ON u.Id = r.UserId
+        WHERE ACCOUNTNAME = #{userName,jdbcType=VARCHAR}
+        GROUP BY a.id
+    </select>
+</mapper>

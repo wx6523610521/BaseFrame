@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.service.permission.mapper.PermissionsMapper">
+    <resultMap id="BaseResultMap" type="work.chncyl.service.permission.entity.Permissions">
+        <!--@mbg.generated-->
+        <!--@Table sys_permissions-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="DisplayName" jdbcType="VARCHAR" property="displayName"/>
+        <result column="PermissionName" jdbcType="VARCHAR" property="permissionName"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="Level" jdbcType="TINYINT" property="level"/>
+        <result column="Sort" jdbcType="INTEGER" property="sort"/>
+        <result column="Type" jdbcType="VARCHAR" property="type"/>
+        <result column="Status" jdbcType="TINYINT" property="status"/>
+        <result column="CreateTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="Creator" jdbcType="INTEGER" property="creator"/>
+        <result column="UpdateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="UpdateUser" jdbcType="INTEGER" property="updateUser"/>
+        <result column="IsDeleted" jdbcType="BOOLEAN" property="isDeleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        DisplayName,
+        PermissionName,
+        url,
+        `Level`,
+        Sort,
+        `Type`,
+        `Status`,
+        CreateTime,
+        Creator,
+        UpdateTime,
+        UpdateUser,
+        IsDeleted
+    </sql>
+
+    <select id="selectPermissionByRole" resultType="java.lang.String">
+        SELECT PermissionName
+        FROM sys_permissions a
+        LEFT JOIN sys_role_permission b ON a.id = b.PermissionId
+        WHERE a.IsDeleted = false
+        AND b.RoleId IN
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </select>
+
+    <select id="selectPermissionsPage" resultMap="BaseResultMap">
+        SELECT *
+        FROM sys_permissions a
+        LEFT JOIN sys_role_permission b ON a.id = b.PermissionId
+        WHERE IsDeleted = false
+        <if test="input.displayName != null and input.displayName != ''">
+            and DisplayName like concat('%', #{input.displayName}, '%')
+        </if>
+        <if test="input.permissionName != null and input.permissionName != ''">
+            and PermissionName = #{input.permissionName}
+        </if>
+        <if test="input.status != null">
+            and Status = #{input.status}
+        </if>
+        <if test="input.roleId != null">
+            and b.RoleId = #{input.roleId}
+        </if>
+        ORDER BY Sort
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+package com.cdlhyj.system.authentication.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cdlhyj.system.authentication.entity.User;
+
+public interface UserMapper extends BaseMapper<User> {
+}
