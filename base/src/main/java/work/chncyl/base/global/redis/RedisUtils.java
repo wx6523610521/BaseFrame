@@ -134,6 +134,10 @@ public class RedisUtils implements CommandLineRunner {
         return redisTemplate.renameIfAbsent(oldKey, newKey);
     }
 
+    public static Long increment(String key, int delta) {
+        return redisTemplate.opsForValue().increment(key, delta);
+    }
+
     public static Long incre(String key) {
         return redisTemplate.opsForValue().increment(key, 1);
     }
@@ -167,10 +171,6 @@ public class RedisUtils implements CommandLineRunner {
 
     public static Long deleteObject(Collection<String> collection) {
         return redisTemplate.delete(collection);
-    }
-
-    public static Long increment(String key, int delta) {
-        return redisTemplate.opsForValue().increment(key, delta);
     }
 
     public static Set<String> keys(String pattern) {

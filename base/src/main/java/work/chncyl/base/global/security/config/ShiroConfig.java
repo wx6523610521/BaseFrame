@@ -77,17 +77,13 @@ public class ShiroConfig implements WebMvcConfigurer {
         filterChainDefinitionMap.put("/logout", "logout");
         // 配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         shiroFilterFactoryBean.setLoginUrl("/unauth");
-        // 登录成功后要跳转的链接
-        // shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面
-        // shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         // 添加自己的过滤器并且取名为 jwt
         Map<String, Filter> filterMap = new HashMap<>(1);
         filterMap.put("jwt", new JwtFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
-        // 设置认证界面路径
-        shiroFilterFactoryBean.setLoginUrl("/web/login.html");
         return shiroFilterFactoryBean;
     }
 

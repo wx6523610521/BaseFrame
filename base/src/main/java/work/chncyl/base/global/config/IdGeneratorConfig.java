@@ -29,17 +29,13 @@ public class IdGeneratorConfig {
     
     @Value("${id.generator.performance.max-clock-backwards-ms:1000}")
     private long maxClockBackwardsMs;
-    
-    @Value("${id.generator.performance.sequence-prealloc-size:200}")
-    private int sequencePreallocSize;
-    
+
     private static long configuredStartTimestamp;
     private static long configuredWorkerId;
     private static long configuredDefaultGroup;
     private static boolean configuredClockBackwardsProtection;
     private static long configuredMaxClockBackwardsMs;
-    private static int configuredSequencePreallocSize;
-    
+
     @PostConstruct
     public void init() {
         // 解析起始时间
@@ -49,14 +45,12 @@ public class IdGeneratorConfig {
         configuredDefaultGroup = defaultGroup;
         configuredClockBackwardsProtection = clockBackwardsProtection;
         configuredMaxClockBackwardsMs = maxClockBackwardsMs;
-        configuredSequencePreallocSize = sequencePreallocSize;
-        
+
         // 设置全局起始时间戳和性能配置
         GlobalIdGenerator.setStartTimestamp(configuredStartTimestamp);
         GlobalIdGenerator.setClockBackwardsProtection(configuredClockBackwardsProtection);
         GlobalIdGenerator.setMaxClockBackwardsMs(configuredMaxClockBackwardsMs);
-        GlobalIdGenerator.setSequencePreallocSize(configuredSequencePreallocSize);
-        
+
         System.out.println("ID Generator configured with:");
         System.out.println("Start Time: " + startDateTime);
         System.out.println("Start Timestamp: " + configuredStartTimestamp);
@@ -64,7 +58,6 @@ public class IdGeneratorConfig {
         System.out.println("Default Group: " + configuredDefaultGroup);
         System.out.println("Clock Backwards Protection: " + configuredClockBackwardsProtection);
         System.out.println("Max Clock Backwards Ms: " + configuredMaxClockBackwardsMs);
-        System.out.println("Sequence Prealloc Size: " + configuredSequencePreallocSize);
     }
     
     public static long getStartTimestamp() {
@@ -86,11 +79,7 @@ public class IdGeneratorConfig {
     public static long getMaxClockBackwardsMs() {
         return configuredMaxClockBackwardsMs;
     }
-    
-    public static int getSequencePreallocSize() {
-        return configuredSequencePreallocSize;
-    }
-    
+
     /**
      * 获取配置的ID生成器实例
      */

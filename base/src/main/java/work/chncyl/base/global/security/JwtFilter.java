@@ -1,5 +1,6 @@
 package work.chncyl.base.global.security;
 
+import com.alibaba.fastjson2.JSON;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -159,7 +160,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
-        this.sendChallenge(request, response);
+        // this.sendChallenge(request, response);
         responseError(response, "token verify fail");
         return false;
     }
@@ -224,6 +225,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         }
         return false;
     }
+
     private String getToken(ServletRequest request) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(Constants.ACCESS_TOKEN);
@@ -246,9 +248,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         httpResponse.setContentType("application/json;charset=UTF-8");
 
         // 使用 try-with-resources 语句来确保 Writer 能够正确关闭
-        try (OutputStream os = httpResponse.getOutputStream()) {
-            String rj = new ObjectMapper().writeValueAsString(ApiResult.error401(msg));
-            os.write(rj.getBytes(StandardCharsets.UTF_8));
+        try (PrintWriter os = httpResponse.getWriter()) {
+            ApiResult<Object> error401 = ApiResult.error401(msg);
+            os.write(JSON.toJSONString(error401));
         } catch (IOException e) {
             e.printStackTrace();
         }
