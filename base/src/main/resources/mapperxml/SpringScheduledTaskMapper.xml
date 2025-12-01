@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.chncyl.base.global.task.mapper.SpringScheduledTaskMapper">
+
+    <resultMap id="BaseResultMap" type="work.chncyl.base.global.task.SpringScheduledTask">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
+        <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR"/>
+        <result column="task_class" property="taskClass" jdbcType="VARCHAR"/>
+        <result column="task_method" property="taskMethod" jdbcType="VARCHAR"/>
+        <result column="task_parameter" property="taskParameter" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="del_flag" property="delFlag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, task_name, cron_expression, task_class, task_method, task_parameter,
+        status, description, create_by, create_time, update_by, update_time, del_flag
+    </sql>
+
+    <insert id="insert" parameterType="work.chncyl.base.global.task.SpringScheduledTask">
+        INSERT INTO sys_spring_scheduled_task (
+            id, task_name, cron_expression, task_class, task_method, task_parameter,
+            status, description, create_by, create_time, update_by, update_time, del_flag
+        ) VALUES (
+            #{id}, #{taskName}, #{cronExpression}, #{taskClass}, #{taskMethod}, #{taskParameter},
+            #{status}, #{description}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{delFlag}
+        )
+    </insert>
+
+    <update id="updateById" parameterType="work.chncyl.base.global.task.SpringScheduledTask">
+        UPDATE sys_spring_scheduled_task
+        SET
+            task_name = #{taskName},
+            cron_expression = #{cronExpression},
+            task_class = #{taskClass},
+            task_method = #{taskMethod},
+            task_parameter = #{taskParameter},
+            status = #{status},
+            description = #{description},
+            update_by = #{updateBy},
+            update_time = #{updateTime}
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+    <update id="deleteById" parameterType="java.lang.String">
+        UPDATE sys_spring_scheduled_task
+        SET del_flag = 1
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_spring_scheduled_task
+        WHERE id = #{id} AND del_flag = 0
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_spring_scheduled_task
+        WHERE del_flag = 0
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_spring_scheduled_task
+        WHERE status = #{status} AND del_flag = 0
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByTaskName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_spring_scheduled_task
+        WHERE task_name = #{taskName} AND del_flag = 0
+    </select>
+</mapper>

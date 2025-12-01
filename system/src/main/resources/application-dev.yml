@@ -28,9 +28,9 @@ spring:
       datasource:
         #配置的库名，可使用任意名，不一定是mysql
         mysql:
-          url: jdbc:mysql://localhost:3306/db?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://192.168.99.149:3306/sp_community?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
           username: root
-          password: 123456
+          password: lhyj2014
           driver-class-name: com.mysql.cj.jdbc.Driver
   #          从库配置
   #        mysql-slave:
@@ -40,7 +40,7 @@ spring:
   #          driver-class-name: com.mysql.cj.jdbc.Driver
   #redis配置
   redis:
-    host: localhost
+    host: 192.168.101.186
     port: 6379
     database: 0
     password:

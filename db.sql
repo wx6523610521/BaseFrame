@@ -236,6 +236,28 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `sys_spring_scheduled_task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_spring_scheduled_task` (
+     `id` varchar(36) NOT NULL COMMENT '主键ID',
+     `task_name` varchar(100) NOT NULL COMMENT '任务名称',
+     `cron_expression` varchar(100) NOT NULL COMMENT 'cron表达式',
+     `task_class` varchar(255) NOT NULL COMMENT '任务类名',
+     `task_method` varchar(100) NOT NULL COMMENT '任务方法名',
+     `task_parameter` varchar(500) DEFAULT NULL COMMENT '任务参数（JSON格式）',
+     `status` int(1) DEFAULT '0' COMMENT '状态：0-正常，-1-停止',
+     `description` varchar(500) DEFAULT NULL COMMENT '描述',
+     `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+     `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
+     `update_by` varchar(50) DEFAULT NULL COMMENT '更新人',
+     `del_flag` int(1) DEFAULT '0' COMMENT '删除状态',
+     PRIMARY KEY (`id`),
+     UNIQUE KEY `uniq_task_name` (`task_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Spring动态定时任务表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 --
 -- Dumping data for table `sys_user_role`
 --
