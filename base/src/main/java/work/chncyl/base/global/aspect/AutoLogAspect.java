@@ -83,7 +83,7 @@ public class AutoLogAspect implements CommandLineRunner {
             //请求的参数
             dto.setRequestParam(getReqestParams(request, joinPoint));
             //设置IP地址
-            dto.setIp(IPUtils.getIpAddr(request));
+            dto.setIp(IPUtils.getIpAddress(request));
             //获取登录用户信息
             JwtClaimDto sysUser = (JwtClaimDto) SecurityUtils.getSubject().getPrincipal();
             if (sysUser != null) {
@@ -151,7 +151,7 @@ public class AutoLogAspect implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         sysLogService = SpringUtils.getBean(SysLogService.class);
     }
 }
